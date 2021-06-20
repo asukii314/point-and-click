@@ -71,6 +71,11 @@ export default class Room1 extends Component {
 
   _mouseUpHandler = (itemId, e) => {
     this.props.onMouseUp(itemId, e.evt.clientX, e.evt.clientY)
+    this.setState({
+      ...this.state,
+      dotX: e.evt.clientX,
+      dotY: e.evt.clientY
+    })
   }
 
   renderClickableItem = (itemId) => {
