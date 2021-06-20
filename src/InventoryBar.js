@@ -23,8 +23,10 @@ export default class InventoryBar extends Component {
   }
 
   dragEndHandler = (item, e) => {
+    const layer = this.refs[item.id].parent;
     this.refs[item.id].position(this.state.lastInvCoords);
-    this.refs[item.id].parent.draw();
+    this.props.onDragEnd(item.interactions.filter((i) => i.type === 'drag'), e.evt.clientX, e.evt.clientY);
+    layer.draw();
   }
 
   renderInventorySlot = (item, i) => {

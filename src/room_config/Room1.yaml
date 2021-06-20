@@ -11,8 +11,10 @@ pillow01:
         text: You check behind the pillow on the couch, and find a small key.
         itemGained:
             id: key01
-            name: Small key
-            text: It looks rather dainty. Probably too small to open a door, but maybe something else?
+            interactions:
+                - type: drag
+                  target: balloon01
+                  text: The key isn't sharp enough to pop this balloon.
 
 balloon01:
     id: balloon01

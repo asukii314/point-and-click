@@ -11,7 +11,12 @@ export default class App extends Component {
       maxInventorySlots: 10,
       inventoryItems: [],
       usedItems: [],
-      text: ''
+      text: '',
+      lastMouseUp: {
+        itemId: null,
+        x: 0,
+        y: 0
+      }
     };
   }
 
@@ -54,16 +59,50 @@ export default class App extends Component {
     }
   }
 
+  logLastMouseUp = (itemId, x, y) => {
+    this.setState({
+      ...this.state,
+      lastMouseUp: {
+        itemId, x, y
+      }
+    })
+  }
+
+  itemDragHandler = (dragInteractions, x, y) => {
+    let found = false;
+    dragInteractions?.forEach((interaction) => {
+      console.log(interaction);
+      if(interaction.target === this.state.lastMouseUp.itemId
+        && x === this.state.lastMouseUp.x
+        && y === this.state.lastMouseUp.y
+      ) {
+        this.setState({
+          ...this.state,
+          text: interaction.text
+        });
+        found = true;
+      }
+    });
+    if(!found) {
+      this.setState({
+        ...this.state,
+        text: 'Nothing happens.'
+      });
+    }
+  }
+
   render() {
     return (
       <div className="App">
       <Stage className='canvas' width='500' height='1000'>
         <Room1
           onClick={this.itemClickHandler}
+          onMouseUp={this.logLastMouseUp}
         />
         <InventoryBar
           items={this.state.inventoryItems}
           maxInventorySlots={this.state.maxInventorySlots}
+          onDragEnd={this.itemDragHandler}
         />
       </Stage>
 

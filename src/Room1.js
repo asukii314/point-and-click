@@ -51,22 +51,26 @@ export default class Room1 extends Component {
     })
   }
 
-  _hoverHandler = (item) => {
+  _hoverHandler = (itemId) => {
     this.setState((state) => {
       return {
         ...state,
-        hoveredItem: item
+        hoveredItem: itemId
       }
     })
   }
 
-  _hoverEndHandler = (item, e) => {
+  _hoverEndHandler = (itemId, e) => {
     this.setState((state) => {
       return {
         ...state,
         hoveredItem: null
       }
     })
+  }
+
+  _mouseUpHandler = (itemId, e) => {
+    this.props.onMouseUp(itemId, e.evt.clientX, e.evt.clientY)
   }
 
   renderClickableItem = (itemId) => {
@@ -84,6 +88,7 @@ export default class Room1 extends Component {
         onClick={this._clickHandler.bind(this, itemId)}
         onMouseover={this._hoverHandler.bind(this, itemId)}
         onMouseleave={this._hoverEndHandler.bind(this, itemId)}
+        onMouseUp={this._mouseUpHandler.bind(this, itemId)}
       />
     )
   }
