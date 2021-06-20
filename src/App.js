@@ -29,7 +29,7 @@ export default class App extends Component {
     let clickInteractionFound = false;
     clickedItem.interactions?.forEach((interaction) => {
       if(interaction.type === 'click') {
-        const hiddenItem = interaction.itemGained;
+        const hiddenItem = interaction.itemsGained?.[0]; // TODO: one-to-many support here
 
         if(hiddenItem && !this.playerHasLooted(hiddenItem)) {
           clickInteractionFound = true;
@@ -102,6 +102,7 @@ export default class App extends Component {
         <InventoryBar
           items={this.state.inventoryItems}
           maxInventorySlots={this.state.maxInventorySlots}
+          onClick={this.itemClickHandler}
           onDragEnd={this.itemDragHandler}
         />
       </Stage>

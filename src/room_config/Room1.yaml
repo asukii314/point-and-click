@@ -9,8 +9,9 @@ pillow01:
     interactions:
       - type: click
         text: You check behind the pillow on the couch, and find a small key.
-        itemGained:
-            id: key01
+        itemsGained:
+          - id: key01
+            description: It's a small key. Probably not big enough to open a door, but something else...?
             interactions:
                 - type: drag
                   target: balloon01

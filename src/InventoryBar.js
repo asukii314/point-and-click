@@ -57,6 +57,7 @@ export default class InventoryBar extends Component {
         draggable
         onMouseDown={this.dragStartHandler}
         onDragEnd={this.dragEndHandler.bind(this, item)}
+        onClick={this.props.onClick.bind(this, item)}
       />
     )
   }
