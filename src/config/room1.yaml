@@ -10,6 +10,8 @@ pillow01:
         text: You check behind the pillow on the couch, and find a small key.
         itemsGained:
           - key01
+        flagsSet:
+          - pillow01_searched
 
 
 balloon01:
@@ -38,3 +40,5 @@ door01:
         - type: click
           text: You head through the back door into the den.
           newRoom: room2
+          flagsSet:
+            - room2_entered

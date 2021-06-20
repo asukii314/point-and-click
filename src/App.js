@@ -23,7 +23,8 @@ export default class App extends Component {
         x: 0,
         y: 0
       },
-      room: 'room1'
+      room: 'room1',
+      flags: [],
     };
 
     this.configMap = {
@@ -105,17 +106,35 @@ export default class App extends Component {
     return false;
   }
 
+  _handleFlagsSet = (interaction) => {
+    const newFlags = interaction.flagsSet?.filter(
+      (flag) => !this.state.flags.includes(flag)
+    );
+
+    if(newFlags?.length > 0) {
+      this.setState({
+        ...this.state,
+        flags: [
+          ...this.state.flags,
+          ...newFlags
+        ]
+      });
+      return true;
+    }
+    return false;
+  }
+
   itemClickHandler = (clickedItem) => {
-    let clickInteractionFound = false;
+    let found = false;
     clickedItem.interactions?.forEach((interaction) => {
       if(interaction.type === 'click') {
-        clickInteractionFound = clickInteractionFound
-                                  || this._handleHiddenItems(interaction)
-                                  || this._handleLostItems(interaction)
-                                  || this._handleRoomTransitions(interaction);
+        found = found | this._handleHiddenItems(interaction)
+                      | this._handleLostItems(interaction)
+                      | this._handleFlagsSet(interaction)
+                      | this._handleRoomTransitions(interaction);
       }
     })
-    if(!clickInteractionFound) {
+    if(!found) {
       this.setState({
         ...this.state,
         text: clickedItem.description
@@ -146,6 +165,7 @@ export default class App extends Component {
         found = true;
         this._handleHiddenItems(interaction);
         this._handleLostItems(interaction);
+        this._handleFlagsSet(interaction);
       }
     });
     if(!found) {

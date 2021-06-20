@@ -13,6 +13,8 @@ key01:
             - diamond01
           itemsLost:
             - key01
+          flagsSet:
+            - safe01_unlocked
 
 diamond01:
     id: diamond01
