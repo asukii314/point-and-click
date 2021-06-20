@@ -3,6 +3,7 @@ import { Stage, Layer, Line, Rect, Image } from 'react-konva';
 import InventoryBar from './InventoryBar';
 import Room from './Room';
 import Room1Config from './room_config/room1.yaml';
+import Room2Config from './room_config/room2.yaml';
 import './App.css';
 
 export default class App extends Component {
@@ -18,11 +19,13 @@ export default class App extends Component {
         x: 0,
         y: 0
       },
-      room: {
-        config: Room1Config,
-        bgImage: 'room1.png'
-      }
+      room: 'room1'
     };
+
+    this.configMap = {
+      room1: Room1Config,
+      room2: Room2Config
+    }
   }
 
   playerHasLooted(item) {
@@ -71,13 +74,27 @@ export default class App extends Component {
     return false;
   }
 
+  _handleRoomTransitions = (interaction) => {
+    const room = interaction.newRoom;
+    if(room) {
+      this.setState({
+        ...this.state,
+        text: interaction.text,
+        room
+      });
+      return true;
+    }
+    return false;
+  }
+
   itemClickHandler = (clickedItem) => {
     let clickInteractionFound = false;
     clickedItem.interactions?.forEach((interaction) => {
       if(interaction.type === 'click') {
         clickInteractionFound = clickInteractionFound
                                   || this._handleHiddenItems(interaction)
-                                  || this._handleLostItems(interaction);
+                                  || this._handleLostItems(interaction)
+                                  || this._handleRoomTransitions(interaction);
       }
     })
     if(!clickInteractionFound) {
@@ -126,8 +143,9 @@ export default class App extends Component {
       <div className="App">
       <Stage className='canvas' width='500' height='1000'>
         <Room
-          config={this.state.room.config}
-          bgImage={this.state.room.bgImage}
+          key={this.state.room}
+          config={this.configMap[this.state.room]}
+          bgImage={`${this.state.room}.png`}
           onClick={this.itemClickHandler}
           onMouseUp={this.logLastMouseUp}
         />

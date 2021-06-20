@@ -44,3 +44,15 @@ safe01:
         points: [373,235,390,230,463,228,462,285,445,294,369,293]
         offsetX: -10
         offsetY: -8
+
+door01:
+    id: door01
+    name: main room door
+    position:
+        points: [361,2,364,232,447,229,447,196,435,184,423,167,412,146,412,124,416,98,420,88,420,2007,420,3]
+        offsetX: -10
+        offsetY: -5
+    interactions:
+        - type: click
+          text: You head through the back door into the den.
+          newRoom: room2
