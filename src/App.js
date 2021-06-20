@@ -25,6 +25,7 @@ export default class App extends Component {
       },
       room: 'room1',
       flags: [],
+      imagePreviewUrl: '',
     };
 
     this.configMap = {
@@ -131,6 +132,16 @@ export default class App extends Component {
           ).length === 0)
   }
 
+  _getImagePreviewUrl = (itemId) => {
+     let itemUrl = `images/${itemId}.png`;
+     let image = new Image();
+     image.src = itemUrl;
+     if (image.width == 0) {
+        return '';
+      }
+      return itemUrl;
+  }
+
   itemClickHandler = (clickedItem) => {
     let found = false;
     this._getValidInteractions(clickedItem.interactions, 'click')
@@ -138,7 +149,8 @@ export default class App extends Component {
           found = true;
           this.setState({
             ...this.state,
-            text: interaction.text
+            text: interaction.text,
+            imagePreviewUrl: '',
           });
 
           this._handleHiddenItems(interaction);
@@ -149,7 +161,8 @@ export default class App extends Component {
     if(!found) {
       this.setState({
         ...this.state,
-        text: clickedItem.description
+        text: clickedItem.description,
+        imagePreviewUrl: this._getImagePreviewUrl(clickedItem.id)
       });
     }
   }
@@ -172,7 +185,8 @@ export default class App extends Component {
       ) {
         this.setState({
           ...this.state,
-          text: interaction.text
+          text: interaction.text,
+          imagePreviewUrl: '',
         });
         found = true;
         this._handleHiddenItems(interaction);
@@ -183,6 +197,7 @@ export default class App extends Component {
     if(!found) {
       this.setState({
         ...this.state,
+        imagePreviewUrl: '',
         text: 'Nothing happens.'
       });
     }
@@ -207,8 +222,9 @@ export default class App extends Component {
         />
       </Stage>
 
-      <header className="App-header">
+      <header className="App-header" style={{display: 'flex', flexDirection: 'column'}}>
         {this.state.text}
+        <img src={this.state.imagePreviewUrl} style={{width: '70%', marginTop: '20px'}} />
       </header>
       </div>
     );
