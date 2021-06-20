@@ -1,0 +1,44 @@
+pillow01:
+    id: pillow01
+    name: pillow
+    description: It's a sort of pretty pillow, but otherwise uninteresting. You've found all there is to be found here.
+    position:
+        points: [133,258,141,265,149,271,158,277,175,275,188,271,203,269,199,279,202,292,196,303,188,312,188,324,185,329,177,332,165,334,154,336,141,341,130,340,124,328,121,317,122,307,131,303,143,299,151,295,143,290,133,285,129,271,129,260]
+        offsetX: -5
+        offsetY: -8
+    interactions:
+      - type: click
+        text: You check behind the pillow on the couch, and find a small key.
+        itemsGained:
+          - id: key01
+            description: It's a small key. Probably not big enough to open a door, but something else...?
+            interactions:
+                - type: drag
+                  target: balloon01
+                  text: The key isn't sharp enough to pop this balloon.
+
+                - type: drag
+                  target: safe01
+                  text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond!
+                  itemsGained:
+                    - id: diamond01
+                      description: It's very sparkly. Good job. You win :)
+
+
+balloon01:
+    id: balloon01
+    name: helium balloon
+    description: It's a large helium balloon. Seems pretty ordinary.
+    position:
+        points: [464,283,461,207,460,197,442,192,430,173,418,152,414,134,413,107,428,85,449,77,469,80,483,101,492,126,491,145,489,166,481,183,466,196,469,282]
+        offsetX: -10
+        offsetY: -5
+
+safe01:
+    id: safe01
+    name: safe
+    description: A small safe. It's locked, and requires a key to open.
+    position:
+        points: [373,235,390,230,463,228,462,285,445,294,369,293]
+        offsetX: -10
+        offsetY: -8
