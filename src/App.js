@@ -1,8 +1,7 @@
-import logo from './logo.svg';
-import room from './room2.png';
+import room from './images/room.png';
 import './App.css';
 import { Component } from 'react';
-import { Stage, Layer, Line } from 'react-konva';
+import { Stage, Layer, Line, Rect, Image } from 'react-konva';
 
 export default class App extends Component {
   constructor() {
@@ -10,7 +9,14 @@ export default class App extends Component {
     this.state = {
       dotX: -10,
       dotY: -10,
+      maxInventorySlots: 10,
+      inventory: [],
+      usedItems: [],
       lastClicked: 'nothing yet',
+      lastInvCoords: {
+        x: 0,
+        y: 0
+      },
       pillow: {
         opacity: 0
       },
@@ -20,7 +26,35 @@ export default class App extends Component {
     };
   }
 
+  componentDidMount() {
+    const image = new window.Image();
+    image.src = "images/key.png";
+    image.onload = () => {
+      this.setState({
+        ...this.state,
+        image: image
+      });
+    }
+  }
+
+  playerHasFound(item) {
+    return this.state.inventory.includes(item) ||
+           this.state.usedItems.includes(item);
+  }
+
   clickHandler = (item, e) => {
+    if(item === 'pillow' && !this.playerHasFound('Small key')) {
+      this.setState((state) => {
+        return {
+          ...state,
+          inventory: [
+            ...state.inventory,
+            'Small key'
+          ]
+        };
+      })
+    }
+
     this.setState((state) => {
       return {
         ...state,
@@ -53,11 +87,58 @@ export default class App extends Component {
     })
   }
 
+  dragStartHandler = (e) => {
+    this.setState({
+      ...this.state,
+      lastInvCoords: {
+        x: e.target.attrs.x,
+        y: e.target.attrs.y
+      }
+    })
+  }
+
+  dragEndHandler = (item, e) => {
+    this.refs[item].position(this.state.lastInvCoords);
+    this.refs[item].parent.draw();
+  }
+
+  renderInventorySlot = (item, i) => {
+    return (
+      <Rect
+        key={i}
+        x={5 + 50*i}
+        y={515}
+        width={40}
+        height={40}
+        fill="grey"
+        shadowBlur={10}
+        shadowOpacity={0.4}
+      />
+    )
+  }
+
+  renderInventoryItem = (item, i) => {
+    return (
+      <Image
+        key={i}
+        ref={item}
+        x={5 + 50*i}
+        y={515}
+        width={40}
+        height={40}
+        image={this.state.image}
+        draggable
+        onMouseDown={this.dragStartHandler}
+        onDragEnd={this.dragEndHandler.bind(this, item)}
+      />
+    )
+  }
+
   render() {
     return (
       <div className="App">
-      <Stage className='canvas' width='500' height='500'>
-        <Layer>
+      <Stage className='canvas' width='500' height='600'>
+        <Layer className='imgLayer'>
           <Line
             x={-5}
             y={-8}
@@ -80,6 +161,21 @@ export default class App extends Component {
             onMouseover={this.hoverHandler.bind(this, 'balloon')}
             onMouseleave={this.hoverEndHandler.bind(this, 'balloon')}
           />
+        </Layer>
+        <Layer className='inventoryLayer'>
+        <Rect
+          x={0}
+          y={510}
+          width={500}
+          height={50}
+          fill="dimgray"
+          shadowBlur={10}
+        />
+        {[...Array(this.state.maxInventorySlots).keys()].map(this.renderInventorySlot)}
+        </Layer>
+
+        <Layer className='inventoryLayer'>
+          {this.state.inventory?.map(this.renderInventoryItem)}
         </Layer>
       </Stage>
       <div  >
