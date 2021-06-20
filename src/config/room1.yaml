@@ -10,21 +10,7 @@ pillow01:
       - type: click
         text: You check behind the pillow on the couch, and find a small key.
         itemsGained:
-          - id: key01
-            description: It's a small key. Probably not big enough to open a door, but something else...?
-            interactions:
-                - type: drag
-                  target: balloon01
-                  text: The key isn't sharp enough to pop this balloon.
-
-                - type: drag
-                  target: safe01
-                  text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond!
-                  itemsGained:
-                    - id: diamond01
-                      description: It's very sparkly. Good job. You win :)
-                  itemsLost:
-                    - id: key01
+          - key01
 
 
 balloon01:

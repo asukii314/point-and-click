@@ -1,0 +1,19 @@
+key01:
+    id: key01
+    description: It's a small key. Probably not big enough to open a door, but something else...?
+    interactions:
+        - type: drag
+          target: balloon01
+          text: The key isn't sharp enough to pop this balloon.
+
+        - type: drag
+          target: safe01
+          text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond!
+          itemsGained:
+            - diamond01
+          itemsLost:
+            - key01
+
+diamond01:
+    id: diamond01
+    description: It's very sparkly. Good job. You win :)

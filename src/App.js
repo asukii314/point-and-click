@@ -1,10 +1,13 @@
 import { Component } from 'react';
-import { Stage, Layer, Line, Rect, Image } from 'react-konva';
+import { Stage } from 'react-konva';
+import YAML from 'yaml';
 import InventoryBar from './InventoryBar';
 import Room from './Room';
-import Room1Config from './room_config/room1.yaml';
-import Room2Config from './room_config/room2.yaml';
+import Room1Config from './config/room1.yaml';
+import Room2Config from './config/room2.yaml';
+import ItemsConfig from './config/items.yaml'
 import './App.css';
+const fetch = require('node-fetch');
 
 export default class App extends Component {
   constructor() {
@@ -12,7 +15,8 @@ export default class App extends Component {
     this.state = {
       maxInventorySlots: 10,
       inventoryItems: [],
-      usedItems: [],
+      usedItemIds: [],
+      itemInfo: {},
       text: '',
       lastMouseUp: {
         itemId: null,
@@ -28,32 +32,46 @@ export default class App extends Component {
     }
   }
 
-  playerHasLooted(item) {
-    return this.state.inventoryItems.map(item => item.id).includes(item.id) ||
-           this.state.usedItems.map(item => item.id).includes(item.id);
+  componentDidMount() {
+    fetch(ItemsConfig)
+      .then(r => r.text())
+      .then(text => {
+        this.setState((state) => {
+          return {
+            ...state,
+            itemInfo: YAML.parse(text)
+          };
+        });
+      })
+  }
+
+  playerHasLooted(itemId) {
+    return this.state.inventoryItems.map((item) => item.id).includes(itemId) ||
+           this.state.usedItemIds.includes(itemId);
   }
 
   _handleLostItems = (interaction) => {
-    const lostItem = interaction.itemsLost?.[0]; // TODO: one-to-many support here
-    if(!lostItem) return false;
+    const lostItemId = interaction.itemsLost?.[0]; // TODO: one-to-many support here
+    if(!lostItemId) return false;
 
-    const newInventory = this.state.inventoryItems.filter((item) => item.id != lostItem.id);
+    const newInventory = this.state.inventoryItems.filter((item) => item.id !== lostItemId);
     this.setState({
       ...this.state,
       text: interaction.text,
       inventoryItems: newInventory,
-      usedItems: [
-        ...this.state.usedItems,
-        lostItem
+      usedItemIds: [
+        ...this.state.usedItemIds,
+        lostItemId
       ]
     });
     return true;
   }
 
   _handleHiddenItems = (interaction) => {
-    const hiddenItem = interaction.itemsGained?.[0]; // TODO: one-to-many support here
+    const hiddenItemId = interaction.itemsGained?.[0]; // TODO: one-to-many support here
 
-    if(hiddenItem && !this.playerHasLooted(hiddenItem)) {
+    if(hiddenItemId && !this.playerHasLooted(hiddenItemId) && this.state.itemInfo[hiddenItemId]) {
+      const hiddenItem = this.state.itemInfo[hiddenItemId];
       const image = new window.Image();
       image.src = `images/${hiddenItem.id}.png`;
       image.onload = () => {
