@@ -25,30 +25,35 @@ export default class App extends Component {
            this.state.usedItems.map(item => item.id).includes(item.id);
   }
 
+  _handleHiddenItems = (interaction) => {
+    const hiddenItem = interaction.itemsGained?.[0]; // TODO: one-to-many support here
+
+    if(hiddenItem && !this.playerHasLooted(hiddenItem)) {
+      const image = new window.Image();
+      image.src = `images/${hiddenItem.id}.png`;
+      image.onload = () => {
+        this.setState({
+          ...this.state,
+          text: interaction.text,
+          inventoryItems: [
+            ...this.state.inventoryItems,
+            {
+              ...hiddenItem,
+              image
+            }
+          ]
+        });
+      }
+      return true;
+    }
+    return false;
+  }
+
   itemClickHandler = (clickedItem) => {
     let clickInteractionFound = false;
     clickedItem.interactions?.forEach((interaction) => {
       if(interaction.type === 'click') {
-        const hiddenItem = interaction.itemsGained?.[0]; // TODO: one-to-many support here
-
-        if(hiddenItem && !this.playerHasLooted(hiddenItem)) {
-          clickInteractionFound = true;
-          const image = new window.Image();
-          image.src = `images/${hiddenItem.id}.png`;
-          image.onload = () => {
-            this.setState({
-              ...this.state,
-              text: interaction.text,
-              inventoryItems: [
-                ...this.state.inventoryItems,
-                {
-                  ...hiddenItem,
-                  image
-                }
-              ]
-            });
-          }
-        }
+        clickInteractionFound = clickInteractionFound || this._handleHiddenItems(interaction);
       }
     })
     if(!clickInteractionFound) {
@@ -81,6 +86,7 @@ export default class App extends Component {
           text: interaction.text
         });
         found = true;
+        this._handleHiddenItems(interaction);
       }
     });
     if(!found) {

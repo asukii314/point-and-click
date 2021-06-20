@@ -17,6 +17,14 @@ pillow01:
                   target: balloon01
                   text: The key isn't sharp enough to pop this balloon.
 
+                - type: drag
+                  target: safe01
+                  text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond!
+                  itemsGained:
+                    - id: diamond01
+                      description: It's very sparkly. Good job. You win :)
+
+
 balloon01:
     id: balloon01
     name: helium balloon
@@ -25,3 +33,12 @@ balloon01:
         points: [464,283,461,207,460,197,442,192,430,173,418,152,414,134,413,107,428,85,449,77,469,80,483,101,492,126,491,145,489,166,481,183,466,196,469,282]
         offsetX: -10
         offsetY: -5
+
+safe01:
+    id: safe01
+    name: safe
+    description: A small safe. It's locked, and requires a key to open.
+    position:
+        points: [373,235,390,230,463,228,462,285,445,294,369,293]
+        offsetX: -10
+        offsetY: -8
