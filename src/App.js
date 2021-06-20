@@ -1,12 +1,17 @@
 import { Component } from 'react';
 import { Stage } from 'react-konva';
 import YAML from 'yaml';
+import CombinationLock from 'combination-lock-react'
+import 'combination-lock-react/dist/index.css'
+
 import InventoryBar from './InventoryBar';
 import Room from './Room';
+import './App.css';
+
 import Room1Config from './config/room1.yaml';
 import Room2Config from './config/room2.yaml';
 import ItemsConfig from './config/items.yaml'
-import './App.css';
+
 const fetch = require('node-fetch');
 
 export default class App extends Component {
@@ -26,6 +31,10 @@ export default class App extends Component {
       room: 'room1',
       flags: [],
       imagePreviewUrl: '',
+      activeLock: {
+        code: '',
+        onUnlock: () => {}
+      },
     };
 
     this.configMap = {
@@ -69,27 +78,30 @@ export default class App extends Component {
   }
 
   _handleHiddenItems = (interaction) => {
-    const hiddenItemId = interaction.itemsGained?.[0]; // TODO: one-to-many support here
+    if(!interaction.itemsGained) return false;
 
-    if(hiddenItemId && !this.playerHasLooted(hiddenItemId) && this.state.itemInfo[hiddenItemId]) {
-      const hiddenItem = this.state.itemInfo[hiddenItemId];
-      const image = new window.Image();
-      image.src = `images/${hiddenItem.id}.png`;
-      image.onload = () => {
-        this.setState({
-          ...this.state,
-          inventoryItems: [
-            ...this.state.inventoryItems,
-            {
-              ...hiddenItem,
-              image
-            }
-          ]
-        });
+    let found = false;
+    for(let hiddenItemId of interaction.itemsGained) {
+      if(!this.playerHasLooted(hiddenItemId) && this.state.itemInfo[hiddenItemId]) {
+        found = true;
+        const hiddenItem = this.state.itemInfo[hiddenItemId];
+        const image = new window.Image();
+        image.src = `images/${hiddenItem.id}.png`;
+        image.onload = () => {
+          this.setState({
+            ...this.state,
+            inventoryItems: [
+              ...this.state.inventoryItems,
+              {
+                ...hiddenItem,
+                image
+              }
+            ]
+          });
+        }
       }
-      return true;
     }
-    return false;
+    return found;
   }
 
   _handleRoomTransitions = (interaction) => {
@@ -122,6 +134,32 @@ export default class App extends Component {
     return false;
   }
 
+  _handleLocks = (interaction) => {
+    if(interaction.code) {
+      // skip this lock if everything it unlocks has already been unlocked
+      const unlockFlags = interaction.unlocks.map((itemId) => `${itemId}_unlocked`);
+      for(let flag of unlockFlags) {
+        if(this.state.flags.includes(flag)) return;
+      }
+
+      this.setState({
+        ...this.state,
+        activeLock: {
+          code: interaction.code,
+          onUnlock: () => {
+            this.setState({
+              ...this.state,
+              flags: [
+                ...this.state.flags,
+                ...unlockFlags
+              ]
+            })
+          }
+        }
+      })
+    }
+  }
+
   _getValidInteractions = (interactions, type) => {
     return interactions
       ?.filter((interaction) => interaction.type === type)
@@ -136,13 +174,26 @@ export default class App extends Component {
      let itemUrl = `images/${itemId}.png`;
      let image = new Image();
      image.src = itemUrl;
-     if (image.width == 0) {
+     if (image.width === 0) {
         return '';
       }
       return itemUrl;
   }
 
+  _clearOldSettings = () => {
+    console.log("CLEAR")
+    this.setState({
+      ...this.state,
+      imagePreviewUrl: '',
+      activeLock: {
+        code: '',
+        onUnlock: () => {}
+      },
+    })
+  }
+
   itemClickHandler = (clickedItem) => {
+    this._clearOldSettings();
     let found = false;
     this._getValidInteractions(clickedItem.interactions, 'click')
       ?.forEach((interaction) => {
@@ -150,13 +201,13 @@ export default class App extends Component {
           this.setState({
             ...this.state,
             text: interaction.text,
-            imagePreviewUrl: '',
           });
 
           this._handleHiddenItems(interaction);
           this._handleLostItems(interaction);
           this._handleFlagsSet(interaction);
           this._handleRoomTransitions(interaction);
+          this._handleLocks(interaction);
     })
     if(!found) {
       this.setState({
@@ -177,6 +228,7 @@ export default class App extends Component {
   }
 
   itemDragHandler = (interactions, x, y) => {
+    this._clearOldSettings();
     let found = false;
     this._getValidInteractions(interactions, 'drag')?.forEach((interaction) => {
       if(interaction.target === this.state.lastMouseUp.itemId
@@ -186,7 +238,6 @@ export default class App extends Component {
         this.setState({
           ...this.state,
           text: interaction.text,
-          imagePreviewUrl: '',
         });
         found = true;
         this._handleHiddenItems(interaction);
@@ -197,7 +248,6 @@ export default class App extends Component {
     if(!found) {
       this.setState({
         ...this.state,
-        imagePreviewUrl: '',
         text: 'Nothing happens.'
       });
     }
@@ -225,6 +275,13 @@ export default class App extends Component {
       <header className="App-header" style={{display: 'flex', flexDirection: 'column'}}>
         {this.state.text}
         <img src={this.state.imagePreviewUrl} style={{width: '70%', marginTop: '20px'}} />
+        <div style={{color: 'black', display: (this.state.activeLock.code ? 'block' : 'none')}}>
+          <CombinationLock
+            combination={`${this.state.activeLock.code}`}
+            onMatch={this.state.activeLock.onUnlock}
+            openText={'Unlocked!'}
+          />
+        </div>
       </header>
       </div>
     );

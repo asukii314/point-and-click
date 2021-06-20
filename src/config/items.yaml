@@ -8,9 +8,10 @@ key01:
 
         - type: drag
           target: safe01
-          text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond!
+          text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond atop a small sheet of paper!
           itemsGained:
             - diamond01
+            - papers01
           itemsLost:
             - key01
           flagsSet:
@@ -19,3 +20,7 @@ key01:
 diamond01:
     id: diamond01
     description: It's very sparkly. Good job. You win :)
+
+papers01:
+    id: papers01
+    description: You found this in the safe. It's tough to imagine what it might possibly be useful for.

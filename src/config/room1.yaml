@@ -46,7 +46,15 @@ door01:
         offsetY: -5
     interactions:
         - type: click
-          text: You head through the back door into the den.
+          text: This door requires a combination lock to open.
+          code: 1842
+          unlocks:
+            - door01
+
+        - type: click
+          text: You head through the back door into the den. There's nothing in here yet, but uh, good job for making it this far?
           newRoom: room2
+          requiredFlags:
+            - door01_unlocked
           flagsSet:
             - room2_entered
