@@ -13,10 +13,7 @@ export default class Room1 extends Component {
       lastClicked: 'nothing yet',
       hoveredItem: null,
       image: null,
-      items: {
-        clickable: {},
-        hidden: {}
-      }
+      items: {}
     };
   }
 
@@ -43,7 +40,7 @@ export default class Room1 extends Component {
   }
 
   _clickHandler = (itemId, e) => {
-    this.props.onClick(this.state.items.clickable[itemId])
+    this.props.onClick(this.state.items[itemId])
     this.setState((state) => {
       return {
         ...state,
@@ -73,10 +70,11 @@ export default class Room1 extends Component {
   }
 
   renderClickableItem = (itemId) => {
-    const item = this.state.items.clickable[itemId];
+    const item = this.state.items[itemId];
     if(!item) return;
     return (
       <Line
+        key={itemId}
         points={item.position.points}
         x={item.position.offsetX}
         y={item.position.offsetY}
@@ -108,7 +106,7 @@ export default class Room1 extends Component {
           radius='4'
           fill='red'
         />
-        {Object.keys(this.state.items.clickable).map(this.renderClickableItem)}
+        {Object.keys(this.state.items).map(this.renderClickableItem)}
       </Layer>
     );
   }

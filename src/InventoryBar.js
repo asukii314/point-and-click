@@ -12,17 +12,6 @@ export default class InventoryBar extends Component {
     };
   }
 
-  componentDidMount() {
-    const image = new window.Image();
-    image.src = "images/key01.png";
-    image.onload = () => {
-      this.setState({
-        ...this.state,
-        image: image
-      });
-    }
-  }
-
   dragStartHandler = (e) => {
     this.setState({
       ...this.state,
@@ -34,8 +23,8 @@ export default class InventoryBar extends Component {
   }
 
   dragEndHandler = (item, e) => {
-    this.refs[item].position(this.state.lastInvCoords);
-    this.refs[item].parent.draw();
+    this.refs[item.id].position(this.state.lastInvCoords);
+    this.refs[item.id].parent.draw();
   }
 
   renderInventorySlot = (item, i) => {
@@ -56,13 +45,13 @@ export default class InventoryBar extends Component {
   renderInventoryItem = (item, i) => {
     return (
       <Image
-        key={i}
-        ref={item}
+        ref={item.id}
+        key={item.id}
         x={(5 + 50*(i % 10))}
         y={515 + Math.floor(i/10) * 50}
         width={40}
         height={40}
-        image={this.state.image}
+        image={item.image}
         draggable
         onMouseDown={this.dragStartHandler}
         onDragEnd={this.dragEndHandler.bind(this, item)}

@@ -15,39 +15,43 @@ export default class App extends Component {
     };
   }
 
-
-  playerHasLooted(itemId) {
-    return this.state.inventoryItems.includes(itemId) ||
-           this.state.usedItems.includes(itemId);
+  playerHasLooted(item) {
+    return this.state.inventoryItems.map(item => item.id).includes(item.id) ||
+           this.state.usedItems.map(item => item.id).includes(item.id);
   }
 
   itemClickHandler = (clickedItem) => {
-    if(clickedItem.interaction?.type !== 'click') {
-      this.setState({
-        ...this.state,
-        text: clickedItem.text
-      });
-      return;
-    }
+    let clickInteractionFound = false;
+    clickedItem.interactions?.forEach((interaction) => {
+      if(interaction.type === 'click') {
+        const hiddenItem = interaction.itemGained;
 
-    const hiddenItem = clickedItem.interaction.itemGained;
-    if(this.playerHasLooted(hiddenItem)) {
-      this.setState({
-        ...this.state,
-        text: clickedItem.text
-      });
-      return;
-    }
-
-    this.setState({
-      ...this.state,
-      inventoryItems: [
-        ...this.state.inventoryItems,
-        hiddenItem
-      ],
-      text: clickedItem.interaction.text
+        if(hiddenItem && !this.playerHasLooted(hiddenItem)) {
+          clickInteractionFound = true;
+          const image = new window.Image();
+          image.src = `images/${hiddenItem.id}.png`;
+          image.onload = () => {
+            this.setState({
+              ...this.state,
+              text: interaction.text,
+              inventoryItems: [
+                ...this.state.inventoryItems,
+                {
+                  ...hiddenItem,
+                  image
+                }
+              ]
+            });
+          }
+        }
+      }
     })
-
+    if(!clickInteractionFound) {
+      this.setState({
+        ...this.state,
+        text: clickedItem.description
+      });
+    }
   }
 
   render() {
