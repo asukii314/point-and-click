@@ -1,6 +1,5 @@
 pillow01:
     id: pillow01
-    description: It's a sort of pretty pillow, but otherwise uninteresting. You've found all there is to be found here.
     position:
         points: [133,258,141,265,149,271,158,277,175,275,188,271,203,269,199,279,202,292,196,303,188,312,188,324,185,329,177,332,165,334,154,336,141,341,130,340,124,328,121,317,122,307,131,303,143,299,151,295,143,290,133,285,129,271,129,260]
         offsetX: -5
@@ -11,6 +10,10 @@ pillow01:
         itemsGained:
           - key01
         flagsSet:
+          - pillow01_searched
+      - type: click
+        text: It's a sort of pretty pillow, but otherwise uninteresting.
+        requiredFlags:
           - pillow01_searched
 
 
@@ -29,6 +32,11 @@ safe01:
         points: [373,235,390,230,463,228,462,285,445,294,369,293]
         offsetX: -10
         offsetY: -8
+    interactions:
+        - type: click
+          requiredFlags:
+            - safe01_unlocked
+          text: Now that you've taken the diamond out, the safe is entirely empty.
 
 door01:
     id: door01

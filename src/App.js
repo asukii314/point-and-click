@@ -58,7 +58,6 @@ export default class App extends Component {
     const newInventory = this.state.inventoryItems.filter((item) => item.id !== lostItemId);
     this.setState({
       ...this.state,
-      text: interaction.text,
       inventoryItems: newInventory,
       usedItemIds: [
         ...this.state.usedItemIds,
@@ -78,7 +77,6 @@ export default class App extends Component {
       image.onload = () => {
         this.setState({
           ...this.state,
-          text: interaction.text,
           inventoryItems: [
             ...this.state.inventoryItems,
             {
@@ -98,7 +96,6 @@ export default class App extends Component {
     if(room) {
       this.setState({
         ...this.state,
-        text: interaction.text,
         room
       });
       return true;
@@ -124,15 +121,30 @@ export default class App extends Component {
     return false;
   }
 
+  _getValidInteractions = (interactions, type) => {
+    return interactions
+      ?.filter((interaction) => interaction.type === type)
+      ?.filter((interaction) =>
+          !interaction.requiredFlags ||
+          interaction.requiredFlags.filter(
+            (flag) => !this.state.flags.includes(flag)
+          ).length === 0)
+  }
+
   itemClickHandler = (clickedItem) => {
     let found = false;
-    clickedItem.interactions?.forEach((interaction) => {
-      if(interaction.type === 'click') {
-        found = found | this._handleHiddenItems(interaction)
-                      | this._handleLostItems(interaction)
-                      | this._handleFlagsSet(interaction)
-                      | this._handleRoomTransitions(interaction);
-      }
+    this._getValidInteractions(clickedItem.interactions, 'click')
+      ?.forEach((interaction) => {
+          found = true;
+          this.setState({
+            ...this.state,
+            text: interaction.text
+          });
+
+          this._handleHiddenItems(interaction);
+          this._handleLostItems(interaction);
+          this._handleFlagsSet(interaction);
+          this._handleRoomTransitions(interaction);
     })
     if(!found) {
       this.setState({
@@ -151,9 +163,9 @@ export default class App extends Component {
     })
   }
 
-  itemDragHandler = (dragInteractions, x, y) => {
+  itemDragHandler = (interactions, x, y) => {
     let found = false;
-    dragInteractions?.forEach((interaction) => {
+    this._getValidInteractions(interactions, 'drag')?.forEach((interaction) => {
       if(interaction.target === this.state.lastMouseUp.itemId
         && x === this.state.lastMouseUp.x
         && y === this.state.lastMouseUp.y
