@@ -23,6 +23,8 @@ pillow01:
                   itemsGained:
                     - id: diamond01
                       description: It's very sparkly. Good job. You win :)
+                  itemsLost:
+                    - id: key01
 
 
 balloon01:

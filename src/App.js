@@ -25,6 +25,23 @@ export default class App extends Component {
            this.state.usedItems.map(item => item.id).includes(item.id);
   }
 
+  _handleLostItems = (interaction) => {
+    const lostItem = interaction.itemsLost?.[0]; // TODO: one-to-many support here
+    if(!lostItem) return false;
+
+    const newInventory = this.state.inventoryItems.filter((item) => item.id != lostItem.id);
+    this.setState({
+      ...this.state,
+      text: interaction.text,
+      inventoryItems: newInventory,
+      usedItems: [
+        ...this.state.usedItems,
+        lostItem
+      ]
+    });
+    return true;
+  }
+
   _handleHiddenItems = (interaction) => {
     const hiddenItem = interaction.itemsGained?.[0]; // TODO: one-to-many support here
 
@@ -53,7 +70,9 @@ export default class App extends Component {
     let clickInteractionFound = false;
     clickedItem.interactions?.forEach((interaction) => {
       if(interaction.type === 'click') {
-        clickInteractionFound = clickInteractionFound || this._handleHiddenItems(interaction);
+        clickInteractionFound = clickInteractionFound
+                                  || this._handleHiddenItems(interaction)
+                                  || this._handleLostItems(interaction);
       }
     })
     if(!clickInteractionFound) {
@@ -86,6 +105,7 @@ export default class App extends Component {
         });
         found = true;
         this._handleHiddenItems(interaction);
+        this._handleLostItems(interaction);
       }
     });
     if(!found) {
