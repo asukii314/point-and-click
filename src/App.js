@@ -180,11 +180,10 @@ export default class App extends Component {
       return itemUrl;
   }
 
-  _clearOldSettings = () => {
-    console.log("CLEAR")
+  reset = (clickedItemId='') => {
     this.setState({
       ...this.state,
-      imagePreviewUrl: '',
+      imagePreviewUrl: this._getImagePreviewUrl(clickedItemId),
       activeLock: {
         code: '',
         onUnlock: () => {}
@@ -193,7 +192,7 @@ export default class App extends Component {
   }
 
   itemClickHandler = (clickedItem) => {
-    this._clearOldSettings();
+    this.reset(clickedItem?.id);
     let found = false;
     this._getValidInteractions(clickedItem.interactions, 'click')
       ?.forEach((interaction) => {
@@ -213,7 +212,6 @@ export default class App extends Component {
       this.setState({
         ...this.state,
         text: clickedItem.description,
-        imagePreviewUrl: this._getImagePreviewUrl(clickedItem.id)
       });
     }
   }
@@ -228,7 +226,7 @@ export default class App extends Component {
   }
 
   itemDragHandler = (interactions, x, y) => {
-    this._clearOldSettings();
+    this.reset();
     let found = false;
     this._getValidInteractions(interactions, 'drag')?.forEach((interaction) => {
       if(interaction.target === this.state.lastMouseUp.itemId
