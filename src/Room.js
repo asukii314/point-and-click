@@ -1,16 +1,15 @@
 import { Component } from 'react';
 import { Layer, Line, Image, Circle } from 'react-konva';
 import YAML from 'yaml'
-import Room1Config from './room_config/Room1.yaml';
+
 const fetch = require('node-fetch');
 
-export default class Room1 extends Component {
+export default class Room extends Component {
   constructor() {
     super();
     this.state = {
       dotX: -10,
       dotY: -10,
-      lastClicked: 'nothing yet',
       hoveredItem: null,
       image: null,
       items: {}
@@ -18,7 +17,7 @@ export default class Room1 extends Component {
   }
 
   componentDidMount() {
-    fetch(Room1Config)
+    fetch(this.props.config)
       .then(r => r.text())
       .then(text => {
         this.setState((state) => {
@@ -30,7 +29,7 @@ export default class Room1 extends Component {
       })
 
     const image = new window.Image();
-    image.src = "images/room1.png";
+    image.src = `images/${this.props.bgImage}`;
     image.onload = () => {
       this.setState({
         ...this.state,
@@ -45,8 +44,7 @@ export default class Room1 extends Component {
       return {
         ...state,
         dotX: e.evt.pageX,
-        dotY: e.evt.pageY,
-        lastClicked: itemId
+        dotY: e.evt.pageY
       }
     })
   }

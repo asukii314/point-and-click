@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import { Stage, Layer, Line, Rect, Image } from 'react-konva';
 import InventoryBar from './InventoryBar';
-import Room1 from './Room1';
+import Room from './Room';
+import Room1Config from './room_config/room1.yaml';
 import './App.css';
 
 export default class App extends Component {
@@ -16,6 +17,10 @@ export default class App extends Component {
         itemId: null,
         x: 0,
         y: 0
+      },
+      room: {
+        config: Room1Config,
+        bgImage: 'room1.png'
       }
     };
   }
@@ -120,7 +125,9 @@ export default class App extends Component {
     return (
       <div className="App">
       <Stage className='canvas' width='500' height='1000'>
-        <Room1
+        <Room
+          config={this.state.room.config}
+          bgImage={this.state.room.bgImage}
           onClick={this.itemClickHandler}
           onMouseUp={this.logLastMouseUp}
         />
