@@ -76,7 +76,6 @@ export default class App extends Component {
   itemDragHandler = (dragInteractions, x, y) => {
     let found = false;
     dragInteractions?.forEach((interaction) => {
-      console.log(interaction);
       if(interaction.target === this.state.lastMouseUp.itemId
         && x === this.state.lastMouseUp.x
         && y === this.state.lastMouseUp.y
