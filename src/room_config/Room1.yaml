@@ -1,0 +1,28 @@
+clickable:
+    pillow01:
+        id: pillow01
+        name: pillow
+        text: It's a sort of pretty pillow, but otherwise uninteresting. You've found all there is to be found here.
+        interaction:
+            type: click
+            text: You check behind the pillow on the couch, and find a small key.
+            itemGained: key01
+        position:
+            points: [133,258,141,265,149,271,158,277,175,275,188,271,203,269,199,279,202,292,196,303,188,312,188,324,185,329,177,332,165,334,154,336,141,341,130,340,124,328,121,317,122,307,131,303,143,299,151,295,143,290,133,285,129,271,129,260]
+            offsetX: -5
+            offsetY: -8
+
+    balloon01:
+        id: balloon01
+        name: helium balloon
+        text: It's a large helium balloon. Seems pretty ordinary.
+        position:
+            points: [464,283,461,207,460,197,442,192,430,173,418,152,414,134,413,107,428,85,449,77,469,80,483,101,492,126,491,145,489,166,481,183,466,196,469,282]
+            offsetX: -10
+            offsetY: -5
+
+hidden:
+    key01:
+        id: key01
+        name: Small key
+        text: It looks rather dainty. Probably too small to open a door, but maybe something else?

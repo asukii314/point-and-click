@@ -14,7 +14,7 @@ export default class InventoryBar extends Component {
 
   componentDidMount() {
     const image = new window.Image();
-    image.src = "images/key.png";
+    image.src = "images/key01.png";
     image.onload = () => {
       this.setState({
         ...this.state,

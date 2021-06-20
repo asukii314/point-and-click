@@ -1,5 +1,8 @@
 import { Component } from 'react';
 import { Layer, Line, Image, Circle } from 'react-konva';
+import YAML from 'yaml'
+import Room1Config from './room_config/Room1.yaml';
+const fetch = require('node-fetch');
 
 export default class Room1 extends Component {
   constructor() {
@@ -9,44 +12,26 @@ export default class Room1 extends Component {
       dotY: -10,
       lastClicked: 'nothing yet',
       hoveredItem: null,
-      pillow: {
-        opacity: 0
-      },
-      balloon: {
-        opacity: 0
-      },
-      image: null
-    };
-
-    this.clickableItems = {
-      'pillow1': {
-        name: 'pillow',
-        id: 'pillow1',
-        position: {
-          points: [133,258,141,265,149,271,158,277,175,275,188,271,203,269,199,279,202,292,196,303,188,312,188,324,185,329,177,332,165,334,154,336,141,341,130,340,124,328,121,317,122,307,131,303,143,299,151,295,143,290,133,285,129,271,129,260],
-          offsetX: -5,
-          offsetY: -8,
-        },
-        contents: 'Small key',
-        text: "You look behind the pillow on the couch.",
-        interactsWith: null
-      },
-      'balloon1': {
-        name: 'balloon',
-        id: 'balloon1',
-        position: {
-          points: [464,283,461,207,460,197,442,192,430,173,418,152,414,134,413,107,428,85,449,77,469,80,483,101,492,126,491,145,489,166,481,183,466,196,469,282],
-          offsetX: -10,
-          offsetY: -5
-        },
-        contents: null,
-        text: "It's a large helium balloon. Seems pretty ordinary.",
-        interactsWith: null
+      image: null,
+      items: {
+        clickable: {},
+        hidden: {}
       }
-    }
+    };
   }
 
   componentDidMount() {
+    fetch(Room1Config)
+      .then(r => r.text())
+      .then(text => {
+        this.setState((state) => {
+          return {
+            ...state,
+            items: YAML.parse(text)
+          };
+        });
+      })
+
     const image = new window.Image();
     image.src = "images/Room1.png";
     image.onload = () => {
@@ -57,14 +42,14 @@ export default class Room1 extends Component {
     }
   }
 
-  _clickHandler = (itemName, e) => {
-    this.props.onClick(this.clickableItems[itemName])
+  _clickHandler = (itemId, e) => {
+    this.props.onClick(this.state.items.clickable[itemId])
     this.setState((state) => {
       return {
         ...state,
         dotX: e.evt.pageX,
         dotY: e.evt.pageY,
-        lastClicked: itemName
+        lastClicked: itemId
       }
     })
   }
@@ -87,26 +72,27 @@ export default class Room1 extends Component {
     })
   }
 
-  renderClickableItem = (itemName) => {
-    if(!this.clickableItems[itemName]) return null;
+  renderClickableItem = (itemId) => {
+    const item = this.state.items.clickable[itemId];
+    if(!item) return;
     return (
       <Line
-        points={this.clickableItems[itemName].position.points}
-        x={this.clickableItems[itemName].position.offsetX}
-        y={this.clickableItems[itemName].position.offsetY}
-        opacity={this.state.hoveredItem === itemName ? 0.2 : 0}
+        points={item.position.points}
+        x={item.position.offsetX}
+        y={item.position.offsetY}
+        opacity={this.state.hoveredItem === itemId ? 0.2 : 0}
         fill='orange'
         closed
-        onClick={this._clickHandler.bind(this, itemName)}
-        onMouseover={this._hoverHandler.bind(this, itemName)}
-        onMouseleave={this._hoverEndHandler.bind(this, itemName)}
+        onClick={this._clickHandler.bind(this, itemId)}
+        onMouseover={this._hoverHandler.bind(this, itemId)}
+        onMouseleave={this._hoverEndHandler.bind(this, itemId)}
       />
     )
   }
 
 
   render() {
-
+    if(!this.state) return null;
     return (
       <Layer className='imgLayer'>
         <Image
@@ -122,7 +108,7 @@ export default class Room1 extends Component {
           radius='4'
           fill='red'
         />
-        {Object.keys(this.clickableItems).map(this.renderClickableItem)}
+        {Object.keys(this.state.items.clickable).map(this.renderClickableItem)}
       </Layer>
     );
   }

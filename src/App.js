@@ -16,35 +16,38 @@ export default class App extends Component {
   }
 
 
-  playerHasLooted(item) {
-    return this.state.inventoryItems.includes(item.contents) ||
-           this.state.usedItems.includes(item.contents);
+  playerHasLooted(itemId) {
+    return this.state.inventoryItems.includes(itemId) ||
+           this.state.usedItems.includes(itemId);
   }
 
-  itemClickHandler = (item) => {
-    if(!item.contents) {
+  itemClickHandler = (clickedItem) => {
+    if(clickedItem.interaction?.type !== 'click') {
       this.setState({
         ...this.state,
-        text: item.text
+        text: clickedItem.text
       });
       return;
     }
 
-    if(this.playerHasLooted(item)) {
+    const hiddenItem = clickedItem.interaction.itemGained;
+    if(this.playerHasLooted(hiddenItem)) {
       this.setState({
         ...this.state,
-        text: `${item.text} There is nothing more to be found here.`
-      })
-    } else {
-      this.setState({
-        ...this.state,
-        inventoryItems: [
-          ...this.state.inventoryItems,
-          item.contents
-        ],
-        text: `${item.text} You find a ${item.contents.toLowerCase()}.`
-      })
+        text: clickedItem.text
+      });
+      return;
     }
+
+    this.setState({
+      ...this.state,
+      inventoryItems: [
+        ...this.state.inventoryItems,
+        hiddenItem
+      ],
+      text: clickedItem.interaction.text
+    })
+
   }
 
   render() {
