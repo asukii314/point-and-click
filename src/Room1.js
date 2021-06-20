@@ -30,7 +30,7 @@ export default class Room1 extends Component {
       })
 
     const image = new window.Image();
-    image.src = "images/Room1.png";
+    image.src = "images/room1.png";
     image.onload = () => {
       this.setState({
         ...this.state,
