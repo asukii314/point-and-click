@@ -251,6 +251,31 @@ export default class App extends Component {
     }
   }
 
+  // todo: reduce duplicated code w/ above function
+  combineItemsHandler = (draggedItem, stationaryItem) => {
+    this.reset();
+    let found = false;
+    this._getValidInteractions(draggedItem.interactions, 'drag')?.forEach((interaction) => {
+      if(interaction.target === stationaryItem.id
+      ) {
+        this.setState({
+          ...this.state,
+          text: interaction.text,
+        });
+        found = true;
+        this._handleHiddenItems(interaction);
+        this._handleLostItems(interaction);
+        this._handleFlagsSet(interaction);
+      }
+    });
+    if(!found) {
+      this.setState({
+        ...this.state,
+        text: 'Nothing happens.'
+      });
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -267,6 +292,7 @@ export default class App extends Component {
           maxInventorySlots={this.state.maxInventorySlots}
           onClick={this.itemClickHandler}
           onDragEnd={this.itemDragHandler}
+          onCombineItems={this.combineItemsHandler}
         />
       </Stage>
 

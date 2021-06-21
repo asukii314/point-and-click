@@ -9,6 +9,7 @@ export default class InventoryBar extends Component {
         x: 0,
         y: 0
       },
+      hoveredIdx: 0,
     };
   }
 
@@ -25,8 +26,22 @@ export default class InventoryBar extends Component {
   dragEndHandler = (item, e) => {
     const layer = this.refs[item.id].parent;
     this.refs[item.id].position(this.state.lastInvCoords);
-    this.props.onDragEnd(item.interactions, e.evt.clientX, e.evt.clientY);
+    let slot = this.getInventorySlotForCoords(e.evt.clientX, e.evt.clientY);
+    if(slot !== null && this.props.items.length > slot) {
+      this.props.onCombineItems(item, this.props.items[slot])
+    } else {
+      this.props.onDragEnd(item.interactions, e.evt.clientX, e.evt.clientY);
+    }
     layer.draw();
+  }
+
+  getInventorySlotForCoords = (x, y) => {
+    let xSlot = Math.ceil((x-5)/50);
+    let ySlot = Math.ceil((y-510)/50);
+    if(xSlot < 1 || xSlot > 10 || ySlot < 1) return null;
+    let posn = 10*(ySlot-1)+(xSlot-1);
+    if(posn >= this.props.maxInventorySlots) return null;
+    return posn;
   }
 
   renderInventorySlot = (item, i) => {
@@ -44,7 +59,8 @@ export default class InventoryBar extends Component {
     )
   }
 
-  renderInventoryItem = (item, i) => {
+  renderInventoryItem = (item, i, isHovered=false) => {
+    if(!isHovered && i === this.state.hoveredIdx) return;
     return (
       <Image
         ref={item.id}
@@ -58,6 +74,12 @@ export default class InventoryBar extends Component {
         onMouseDown={this.dragStartHandler}
         onDragEnd={this.dragEndHandler.bind(this, item)}
         onClick={this.props.onClick.bind(this, item)}
+        onMouseOver={() => {
+          this.setState({
+            ...this.state,
+            hoveredIdx: i
+          })
+        }}
       />
     )
   }
@@ -74,7 +96,10 @@ export default class InventoryBar extends Component {
           shadowBlur={10}
         />
         {[...Array(parseInt(this.props.maxInventorySlots)).keys()].map(this.renderInventorySlot)}
-        {this.props.items?.map(this.renderInventoryItem)}
+
+        {/* render the item being hovered after all others, so it has the highest z-index when dragged */}
+        {this.props.items?.map((item, i) => (this.renderInventoryItem(item, i)))}
+        {this.props.items.length > 0 && this.renderInventoryItem(this.props.items[this.state.hoveredIdx], this.state.hoveredIdx, true)}
       </Layer>
     );
   }
