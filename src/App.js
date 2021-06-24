@@ -96,6 +96,10 @@ export default class App extends Component {
                 ...hiddenItem,
                 image
               }
+            ],
+            flags: [
+              ...this.state.flags,
+              `${hiddenItemId}_obtained`
             ]
           });
         }

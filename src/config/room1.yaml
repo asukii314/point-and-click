@@ -9,12 +9,10 @@ pillow01:
         text: You check behind the pillow on the couch, and find a small key.
         itemsGained:
           - key01
-        flagsSet:
-          - pillow01_searched
       - type: click
         text: It's a sort of pretty pillow, but otherwise uninteresting.
         requiredFlags:
-          - pillow01_searched
+          - key01_obtained
 
 
 balloon01:
