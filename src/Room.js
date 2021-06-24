@@ -68,7 +68,7 @@ export default class Room extends Component {
   }
 
   _mouseUpHandler = (itemId, e) => {
-    this.props.onMouseUp(itemId, e.evt.clientX, e.evt.clientY)
+    this.props.onMouseUp(itemId, e.target.getStage().getPointerPosition())
     this.setState({
       ...this.state,
       dotX: e.evt.clientX,
@@ -92,6 +92,7 @@ export default class Room extends Component {
         onTap={(e) => this._clickHandler(itemId, e.target.getStage().getPointerPosition())}
         onMouseover={this._hoverHandler.bind(this, itemId)}
         onMouseleave={this._hoverEndHandler.bind(this, itemId)}
+        onTouchEnd={this._mouseUpHandler.bind(this, itemId)}
         onMouseUp={this._mouseUpHandler.bind(this, itemId)}
       />
     )

@@ -216,7 +216,7 @@ export default class App extends Component {
     }
   }
 
-  logLastMouseUp = (itemId, x, y) => {
+  logLastMouseUp = (itemId, {x, y}) => {
     this.setState({
       ...this.state,
       lastMouseUp: {
@@ -225,7 +225,7 @@ export default class App extends Component {
     })
   }
 
-  itemDragHandler = (interactions, x, y) => {
+  itemDragHandler = (interactions, {x, y}) => {
     this.reset();
     let found = false;
     this._getValidInteractions(interactions, 'drag')?.forEach((interaction) => {
