@@ -62,16 +62,16 @@ export default class App extends Component {
   }
 
   _handleLostItems = (interaction) => {
-    const lostItemId = interaction.itemsLost?.[0]; // TODO: one-to-many support here
-    if(!lostItemId) return false;
+    const lostItemIds = interaction.itemsLost;
+    if(!lostItemIds || lostItemIds.length === 0) return false;
 
-    const newInventory = this.state.inventoryItems.filter((item) => item.id !== lostItemId);
+    const newInventory = this.state.inventoryItems.filter((item) => !lostItemIds.includes(item.id));
     this.setState({
       ...this.state,
       inventoryItems: newInventory,
       usedItemIds: [
         ...this.state.usedItemIds,
-        lostItemId
+        ...lostItemIds
       ]
     });
     return true;

@@ -6,13 +6,15 @@ pillow01:
         offsetY: -8
     interactions:
       - type: click
-        text: You check behind the pillow on the couch, and find a small key.
+        text: You check behind the pillow on the couch, and find a small key and a AA battery.
         itemsGained:
           - key01
+          - aa_battery
       - type: click
         text: It's a sort of pretty pillow, but otherwise uninteresting.
         requiredFlags:
           - key01_obtained
+          - aa_battery_obtained
 
 
 balloon01:
@@ -22,6 +24,26 @@ balloon01:
         points: [464,283,461,207,460,197,442,192,430,173,418,152,414,134,413,107,428,85,449,77,469,80,483,101,492,126,491,145,489,166,481,183,466,196,469,282]
         offsetX: -10
         offsetY: -5
+
+under_couch01:
+    id: under_couch01
+    position:
+        points: [305,367,308,379,264,390,236,384,232,371,260,374,302,367]
+        offsetX: -5
+        offsetY: -6
+    interactions:
+      - type: click
+        text: It's too dark to see anything under the couch right now.
+      - type: click
+        text: With the flashlight to help you see what you're doing, you spot a small folded up piece of paper poking out of the underside of the couch.
+        itemsGained:
+          - papers01
+        requiredFlags:
+          - flashlight_powered_obtained
+      - type: click
+        text: You can't find anything else under the couch.
+        requiredFlags:
+          - papers01_obtained
 
 safe01:
     id: safe01
@@ -34,7 +56,7 @@ safe01:
         - type: click
           requiredFlags:
             - safe01_unlocked
-          text: Now that you've taken the diamond out, the safe is entirely empty.
+          text: Now that you've taken out the diamond and the battery, the safe is entirely empty.
 
 door01:
     id: door01

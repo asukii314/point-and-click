@@ -60,7 +60,7 @@ export default class InventoryBar extends Component {
   }
 
   renderInventoryItem = (item, i, isHovered=false) => {
-    if(!isHovered && i === this.state.hoveredIdx) return;
+    if(!item || (!isHovered && i === this.state.hoveredIdx)) return;
     return (
       <Image
         ref={item.id}

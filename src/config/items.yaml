@@ -11,7 +11,7 @@ key01:
           text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond atop a small sheet of paper!
           itemsGained:
             - diamond01
-            - papers01
+            - flashlight_unpowered
           itemsLost:
             - key01
           flagsSet:
@@ -19,8 +19,47 @@ key01:
 
 diamond01:
     id: diamond01
-    description: It's very sparkly. Good job. You win :)
+    description: It's very sparkly. Good job. Now you've just gotta get out with it :)
 
 papers01:
     id: papers01
-    description: You found this in the safe. It's tough to imagine what it might possibly be useful for.
+    description: You found this under the couch. It's tough to imagine what it might possibly be useful for.
+
+flashlight_unpowered:
+  id: flashlight_unpowered
+  description: It needs a AA battery to work.
+  interactions:
+    - type: drag
+      target: aa_battery
+      text: The battery slots in, and the flashlight turns on!
+      itemsGained:
+        - flashlight_powered
+      itemsLost:
+        - flashlight_unpowered
+        - aa_battery
+    - type: drag
+      target: under_couch01
+      text: This would work great, if the flashlight could turn on right now. It needs a working AA battery first.
+
+aa_battery:
+  id: aa_battery
+  description: A single AA battery, full of charge. What will you power with it?
+  interactions:
+    - type: drag
+      target: flashlight_unpowered
+      text: The battery slots in, and the flashlight turns on!
+      itemsGained:
+        - flashlight_powered
+      itemsLost:
+        - flashlight_unpowered
+        - aa_battery
+
+flashlight_powered:
+  id: flashlight_powered
+  description: The light is really bright. Don't point it in your eye.
+  interactions:
+    - type: drag
+      target: under_couch01
+      text: With the flashlight to help you see what you're doing, you spot a small folded up piece of paper poking out of the underside of the couch.
+      itemsGained:
+        - papers01
