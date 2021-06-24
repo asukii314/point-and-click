@@ -38,13 +38,13 @@ export default class Room extends Component {
     }
   }
 
-  _clickHandler = (itemId, e) => {
+  _clickHandler = (itemId, coords) => {
     this.props.onClick(this.state.items[itemId])
     this.setState((state) => {
       return {
         ...state,
-        dotX: e.evt.pageX,
-        dotY: e.evt.pageY
+        dotX: coords.x,
+        dotY: coords.y,
       }
     })
   }
@@ -88,7 +88,8 @@ export default class Room extends Component {
         opacity={this.state.hoveredItem === itemId ? 0.2 : 0}
         fill='orange'
         closed
-        onClick={this._clickHandler.bind(this, itemId)}
+        onClick={(e) => this._clickHandler(itemId, {x: e.evt.clientX, y: e.evt.clientY})}
+        onTap={(e) => this._clickHandler(itemId, e.target.getStage().getPointerPosition())}
         onMouseover={this._hoverHandler.bind(this, itemId)}
         onMouseleave={this._hoverEndHandler.bind(this, itemId)}
         onMouseUp={this._mouseUpHandler.bind(this, itemId)}
