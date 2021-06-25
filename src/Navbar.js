@@ -18,13 +18,13 @@ export default class Navbar extends Component {
       <nav role='navigation'>
         <b>Asukii's Adventure Game Maker</b>
         <ul>
-          <li><a href="/">Home</a></li>
+          <li><a href="#/">Home</a></li>
           <li><a>Games</a>
             <ul>
               {Object.keys(this.props.gamesConfig).map(this._renderGameLink)}
             </ul>
           </li>
-          <li><a href="/contact">Contact</a></li>
+          <li><a href="#/contact">Contact</a></li>
         </ul>
       </nav>
     );
