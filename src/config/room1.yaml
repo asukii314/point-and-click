@@ -7,12 +7,12 @@ pillow01:
     onClick:
       - text: You check behind the pillow on the couch, and find a small key and a AA battery.
         itemsGained:
-          - key01
-          - aa_battery
+            - key01
+            - aa_battery
       - text: It's a sort of pretty pillow, but otherwise uninteresting.
         requiredFlags:
-          - key01_obtained
-          - aa_battery_obtained
+            - key01_obtained
+            - aa_battery_obtained
 
 
 balloon01:
@@ -33,12 +33,12 @@ under_couch01:
       - text: It's too dark to see anything under the couch right now.
       - text: With the flashlight to help you see what you're doing, you spot a small folded up piece of paper poking out of the underside of the couch.
         itemsGained:
-          - papers01
+            - papers01
         requiredFlags:
-          - flashlight_powered_obtained
+            - flashlight_powered_obtained
       - text: You can't find anything else under the couch.
         requiredFlags:
-          - papers01_obtained
+            - papers01_obtained
 
 safe01:
     id: safe01
@@ -48,9 +48,9 @@ safe01:
         offsetX: -10
         offsetY: -8
     onClick:
-        - requiredFlags:
-            - safe01_unlocked
-          text: Now that you've taken out the diamond and the battery, the safe is entirely empty.
+        - text: Now that you've taken out the diamond and the battery, the safe is entirely empty.
+          requiredFlags:
+              - safe01_unlocked
 
 door01:
     id: door01
@@ -62,11 +62,11 @@ door01:
         - text: This door requires a combination lock to open.
           code: 1842
           unlocks:
-            - door01
+              - door01
 
         - text: You head through the back door into the den. There's nothing in here yet, but uh, good job for making it this far?
           newRoom: room2
           requiredFlags:
-            - door01_unlocked
+              - door01_unlocked
           flagsSet:
-            - room2_entered
+              - room2_entered
