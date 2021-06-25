@@ -159,9 +159,8 @@ export default class App extends Component {
     }
   }
 
-  _getValidInteractions = (interactions, type) => {
+  _getValidInteractions = (interactions) => {
     return interactions
-      ?.filter((interaction) => interaction.type === type)
       ?.filter((interaction) =>
           !interaction.requiredFlags ||
           interaction.requiredFlags.filter(
@@ -190,10 +189,18 @@ export default class App extends Component {
     })
   }
 
-  itemClickHandler = (clickedItem) => {
+  itemInspectHandler = (clickedItem) => {
     this.reset(clickedItem?.id);
+    this.setState({
+      ...this.state,
+      text: clickedItem.description,
+    });
+  }
+
+  itemClickHandler = (item) => {
+    this.reset(item?.id);
     let found = false;
-    this._getValidInteractions(clickedItem.interactions, 'click')
+    this._getValidInteractions(item.onClick)
       ?.forEach((interaction) => {
           found = true;
           this.setState({
@@ -210,7 +217,7 @@ export default class App extends Component {
     if(!found) {
       this.setState({
         ...this.state,
-        text: clickedItem.description,
+        text: item.description,
       });
     }
   }
@@ -227,7 +234,7 @@ export default class App extends Component {
   itemDragHandler = (interactions, {x, y}) => {
     this.reset();
     let found = false;
-    this._getValidInteractions(interactions, 'drag')?.forEach((interaction) => {
+    this._getValidInteractions(interactions)?.forEach((interaction) => {
       if(interaction.target === this.state.lastMouseUp.itemId
         && x === this.state.lastMouseUp.x
         && y === this.state.lastMouseUp.y
@@ -254,7 +261,7 @@ export default class App extends Component {
   combineItemsHandler = (draggedItem, stationaryItem) => {
     this.reset();
     let found = false;
-    this._getValidInteractions(draggedItem.interactions, 'drag')?.forEach((interaction) => {
+    this._getValidInteractions(draggedItem.interactions)?.forEach((interaction) => {
       if(interaction.target === stationaryItem.id
       ) {
         this.setState({
@@ -296,7 +303,7 @@ export default class App extends Component {
           <InventoryBar
             items={this.state.inventoryItems}
             maxInventorySlots={this.state.maxInventorySlots}
-            onClick={this.itemClickHandler}
+            onClick={this.itemInspectHandler}
             onDragEnd={this.itemDragHandler}
             onCombineItems={this.combineItemsHandler}
             scale={this.state.isMobile ? 1/0.6 : 1}

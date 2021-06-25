@@ -4,14 +4,12 @@ pillow01:
         points: [133,258,141,265,149,271,158,277,175,275,188,271,203,269,199,279,202,292,196,303,188,312,188,324,185,329,177,332,165,334,154,336,141,341,130,340,124,328,121,317,122,307,131,303,143,299,151,295,143,290,133,285,129,271,129,260]
         offsetX: -5
         offsetY: -8
-    interactions:
-      - type: click
-        text: You check behind the pillow on the couch, and find a small key and a AA battery.
+    onClick:
+      - text: You check behind the pillow on the couch, and find a small key and a AA battery.
         itemsGained:
           - key01
           - aa_battery
-      - type: click
-        text: It's a sort of pretty pillow, but otherwise uninteresting.
+      - text: It's a sort of pretty pillow, but otherwise uninteresting.
         requiredFlags:
           - key01_obtained
           - aa_battery_obtained
@@ -31,17 +29,14 @@ under_couch01:
         points: [305,367,308,379,264,390,236,384,232,371,260,374,302,367]
         offsetX: -5
         offsetY: -6
-    interactions:
-      - type: click
-        text: It's too dark to see anything under the couch right now.
-      - type: click
-        text: With the flashlight to help you see what you're doing, you spot a small folded up piece of paper poking out of the underside of the couch.
+    onClick:
+      - text: It's too dark to see anything under the couch right now.
+      - text: With the flashlight to help you see what you're doing, you spot a small folded up piece of paper poking out of the underside of the couch.
         itemsGained:
           - papers01
         requiredFlags:
           - flashlight_powered_obtained
-      - type: click
-        text: You can't find anything else under the couch.
+      - text: You can't find anything else under the couch.
         requiredFlags:
           - papers01_obtained
 
@@ -52,9 +47,8 @@ safe01:
         points: [373,235,390,230,463,228,462,285,445,294,369,293]
         offsetX: -10
         offsetY: -8
-    interactions:
-        - type: click
-          requiredFlags:
+    onClick:
+        - requiredFlags:
             - safe01_unlocked
           text: Now that you've taken out the diamond and the battery, the safe is entirely empty.
 
@@ -64,15 +58,13 @@ door01:
         points: [361,2,364,232,447,229,447,196,435,184,423,167,412,146,412,124,416,98,420,88,420,2007,420,3]
         offsetX: -10
         offsetY: -5
-    interactions:
-        - type: click
-          text: This door requires a combination lock to open.
+    onClick:
+        - text: This door requires a combination lock to open.
           code: 1842
           unlocks:
             - door01
 
-        - type: click
-          text: You head through the back door into the den. There's nothing in here yet, but uh, good job for making it this far?
+        - text: You head through the back door into the den. There's nothing in here yet, but uh, good job for making it this far?
           newRoom: room2
           requiredFlags:
             - door01_unlocked

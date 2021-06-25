@@ -4,7 +4,7 @@ test01:
         points: [133,165,128,122,128,75,140,51,226,51,236,234,185,240,146,228]
         offsetX: -10
         offsetY: -3
-    interactions:
+    onClick:
       - type: click
         text: You return to the main room.
         newRoom: room1
