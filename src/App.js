@@ -31,20 +31,17 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-      <Navbar gamesConfig={gamesConfig} />
-      <div className="App">
-
-
-        <Switch>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
-          <Route exact path="/contact">
-            <ContactPage />
-          </Route>
-          <Route path="/:id" children={<RoutedGame />} />
-        </Switch>
-
+        <Navbar gamesConfig={gamesConfig} />
+        <div className="App">
+          <Switch>
+            <Route exact path="/">
+              <HomePage />
+            </Route>
+            <Route exact path="/contact">
+              <ContactPage />
+            </Route>
+            <Route path="/:id" children={<RoutedGame />} />
+          </Switch>
         </div>
       </Router>
     );
