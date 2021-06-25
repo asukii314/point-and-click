@@ -291,7 +291,7 @@ export default class App extends Component {
             bgImage={`${this.state.room}.png`}
             onClick={this.itemClickHandler}
             onMouseUp={this.logLastMouseUp}
-            isMobile={this.state.isMobile}
+            scale={this.state.isMobile ? 1/0.6 : 1}
           />
           <InventoryBar
             items={this.state.inventoryItems}
@@ -299,6 +299,7 @@ export default class App extends Component {
             onClick={this.itemClickHandler}
             onDragEnd={this.itemDragHandler}
             onCombineItems={this.combineItemsHandler}
+            scale={this.state.isMobile ? 1/0.6 : 1}
           />
         </Stage>
 

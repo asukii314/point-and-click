@@ -36,8 +36,8 @@ export default class InventoryBar extends Component {
   }
 
   getInventorySlotForCoords = ({x, y}) => {
-    let xSlot = Math.ceil((x-5)/50);
-    let ySlot = Math.ceil((y-510)/50);
+    let xSlot = Math.ceil((x*this.props.scale-5)/50);
+    let ySlot = Math.ceil((y*this.props.scale-510)/50);
     if(xSlot < 1 || xSlot > 10 || ySlot < 1) return null;
     let posn = 10*(ySlot-1)+(xSlot-1);
     if(posn >= this.props.maxInventorySlots) return null;

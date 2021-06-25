@@ -113,8 +113,8 @@ export default class Room extends Component {
           image={this.state.image}
         />
         <Circle
-          x={this.props.isMobile ? this.state.dotX*1.67 : this.state.dotX}
-          y={this.props.isMobile ? this.state.dotY*1.67 : this.state.dotY}
+          x={this.props.scale * this.state.dotX}
+          y={this.props.scale * this.state.dotY}
           radius='4'
           fill='red'
         />
