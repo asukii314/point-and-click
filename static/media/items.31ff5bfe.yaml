@@ -2,19 +2,17 @@ key01:
     id: key01
     description: It's a small key. Probably not big enough to open a door, but something else...?
     interactions:
-        - type: drag
-          target: balloon01
-          text: The key isn't sharp enough to pop this balloon.
+      - target: balloon01
+        text: The key isn't sharp enough to pop this balloon.
 
-        - type: drag
-          target: safe01
-          text: The key slots neatly into the lock, and the safe swings open, revealing a massive diamond atop a small sheet of paper!
-          itemsGained:
+      - target: safe01
+        text: The key slots neatly into the lock, and the safe swings open, revealing a small unpowered flashlight and a massive diamond!
+        itemsGained:
             - diamond01
             - flashlight_unpowered
-          itemsLost:
+        itemsLost:
             - key01
-          flagsSet:
+        flagsSet:
             - safe01_unlocked
 
 diamond01:
@@ -29,37 +27,34 @@ flashlight_unpowered:
   id: flashlight_unpowered
   description: It needs a AA battery to work.
   interactions:
-    - type: drag
-      target: aa_battery
+    - target: aa_battery
       text: The battery slots in, and the flashlight turns on!
       itemsGained:
-        - flashlight_powered
+          - flashlight_powered
       itemsLost:
-        - flashlight_unpowered
-        - aa_battery
-    - type: drag
-      target: under_couch01
+          - flashlight_unpowered
+          - aa_battery
+
+    - target: under_couch01
       text: This would work great, if the flashlight could turn on right now. It needs a working AA battery first.
 
 aa_battery:
   id: aa_battery
   description: A single AA battery, full of charge. What will you power with it?
   interactions:
-    - type: drag
-      target: flashlight_unpowered
+    - target: flashlight_unpowered
       text: The battery slots in, and the flashlight turns on!
       itemsGained:
-        - flashlight_powered
+          - flashlight_powered
       itemsLost:
-        - flashlight_unpowered
-        - aa_battery
+          - flashlight_unpowered
+          - aa_battery
 
 flashlight_powered:
   id: flashlight_powered
   description: The light is really bright. Don't point it in your eye.
   interactions:
-    - type: drag
-      target: under_couch01
+    - target: under_couch01
       text: With the flashlight to help you see what you're doing, you spot a small folded up piece of paper poking out of the underside of the couch.
       itemsGained:
-        - papers01
+          - papers01
