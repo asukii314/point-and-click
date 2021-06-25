@@ -14,8 +14,6 @@ import Room1Config from './config/room1.yaml';
 import Room2Config from './config/room2.yaml';
 import DemoGameItemsConfig from './config/items.yaml'
 
-const fetch = require('node-fetch');
-
 // TODO: make this auto-load based on subfolder structures
 const gamesConfig = {
   "demo-game": {

@@ -1,10 +1,6 @@
 import { Component } from 'react';
 import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
   Link,
-  useParams,
  } from "react-router-dom";
 import './Navbar.css';
 
@@ -23,7 +19,7 @@ export default class Navbar extends Component {
         <b>Asukii's Adventure Game Maker</b>
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="#">Games</a>
+          <li><a>Games</a>
             <ul>
               {Object.keys(this.props.gamesConfig).map(this._renderGameLink)}
             </ul>

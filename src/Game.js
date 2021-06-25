@@ -292,7 +292,7 @@ export default class App extends Component {
 
         <header className="App-header" style={{display: 'flex', flexDirection: 'column'}}>
           {this.state.text}
-          <img src={this.state.imagePreviewUrl} style={{width: '70%', marginTop: '20px'}} />
+          <img src={this.state.imagePreviewUrl} alt="" style={{width: '70%', marginTop: '20px'}} />
           <div style={{color: 'black', display: (this.state.activeLock.code ? 'block' : 'none')}}>
             <CombinationLock
               combination={`${this.state.activeLock.code}`}
