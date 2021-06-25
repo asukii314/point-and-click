@@ -133,30 +133,41 @@ export default class App extends Component {
     return false;
   }
 
-  _handleLocks = (interaction) => {
-    if(interaction.code) {
+  _handleLocks = (interaction) => {    
       // skip this lock if everything it unlocks has already been unlocked
-      const unlockFlags = interaction.unlocks.map((itemId) => `${itemId}_unlocked`);
+      const unlockFlags = interaction.unlocks?.map((itemId) => `${itemId}_unlocked`);
+      if(!unlockFlags) return;
       for(let flag of unlockFlags) {
         if(this.state.flags.includes(flag)) return;
       }
 
-      this.setState({
-        ...this.state,
-        activeLock: {
-          code: interaction.code,
-          onUnlock: () => {
-            this.setState({
-              ...this.state,
-              flags: [
-                ...this.state.flags,
-                ...unlockFlags
-              ]
-            })
+      if(interaction.code) {
+        this.setState({
+          ...this.state,
+          activeLock: {
+            code: interaction.code,
+            onUnlock: () => {
+              this.setState({
+                ...this.state,
+                flags: [
+                  ...this.state.flags,
+                  ...unlockFlags
+                ]
+              })
+            }
           }
-        }
-      })
-    }
+        })
+      } else {
+        this.setState({
+          ...this.state,
+          flags: [
+            ...this.state.flags,
+            ...unlockFlags
+          ]
+        })
+      }
+
+    // }
   }
 
   _getValidInteractions = (interactions) => {
@@ -247,6 +258,7 @@ export default class App extends Component {
         this._handleHiddenItems(interaction);
         this._handleLostItems(interaction);
         this._handleFlagsSet(interaction);
+        this._handleLocks(interaction);
       }
     });
     if(!found) {

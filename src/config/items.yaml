@@ -12,8 +12,8 @@ key01:
             - flashlight_unpowered
         itemsLost:
             - key01
-        flagsSet:
-            - safe01_unlocked
+        unlocks:
+            - safe01
 
 diamond01:
     id: diamond01
