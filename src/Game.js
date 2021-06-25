@@ -30,10 +30,15 @@ export default class App extends Component {
         code: '',
         onUnlock: () => {}
       },
+      isMobile: window.matchMedia("(max-width: 650px)").matches,
     };
   }
 
   componentDidMount() {
+    window.matchMedia("(max-width: 650px)").addListener(
+      (e) => this.setState({isMobile: e.matches})
+    );
+
     fetch(this.props.itemsConfig)
       .then(r => r.text())
       .then(text => {
@@ -273,13 +278,20 @@ export default class App extends Component {
   render() {
     return (
       <div className="Game">
-        <Stage className='canvas' width='500' height='1000'>
+        <Stage
+          className='canvas'
+          width={this.state.isMobile ? 300 : 500}
+          height='1000'
+          scaleX={this.state.isMobile ? 0.6 : 1}
+          scaleY={this.state.isMobile ? 0.6 : 1}
+        >
           <Room
             key={this.state.room}
             config={this.props.roomsConfig[this.state.room]}
             bgImage={`${this.state.room}.png`}
             onClick={this.itemClickHandler}
             onMouseUp={this.logLastMouseUp}
+            isMobile={this.state.isMobile}
           />
           <InventoryBar
             items={this.state.inventoryItems}

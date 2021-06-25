@@ -16,15 +16,45 @@ small {
   font-size: x-small;
 }
 
+/* mobile */
 @media only screen and (max-width: 650px) {
   .App {
     padding-top: 80px;
   }
+
+  .canvas {
+    width: 300px;
+    height: 300px;
+  }
+
+  .room-img {
+    height: 300px;
+  }
+
+  .App-header {
+    padding-left: 10px;
+    padding-top: 350px;
+  }
 }
 
+/* desktop */
 @media only screen and (min-width: 651px) {
   .App {
     padding-top: 40px;
+  }
+
+  .canvas {
+    width: 500px;
+    height: 500px;
+  }
+
+  .room-img {
+    height: 500px;
+  }
+
+  .App-header {
+    padding-left: 520px;
+    padding-top: 10px;
   }
 }
 
@@ -35,7 +65,6 @@ small {
 }
 
 .room-img {
-  height: 500px;
   left: 0;
   top: 0;
   float: left;
@@ -44,8 +73,6 @@ small {
 .App-header {
   font-size: calc(6px + 2vmin);
   color: white;
-  padding-left: 510px;
-  padding-top: 10px;
   padding-right: 50px;
 }
 
@@ -60,6 +87,4 @@ small {
 
 .canvas {
   position: absolute;
-  width: 500px;
-  height: 500px;
 }
