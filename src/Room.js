@@ -38,7 +38,8 @@ export default class Room extends Component {
     }
   }
 
-  _clickHandler = (itemId, coords) => {
+  _clickHandler = (itemId, e) => {
+    const coords = e.target.getStage().getPointerPosition();
     this.props.onClick(this.state.items[itemId])
     this.setState((state) => {
       return {
@@ -68,11 +69,12 @@ export default class Room extends Component {
   }
 
   _mouseUpHandler = (itemId, e) => {
-    this.props.onMouseUp(itemId, e.target.getStage().getPointerPosition())
+    const pos = e.target.getStage().getPointerPosition();
+    this.props.onMouseUp(itemId, pos)
     this.setState({
       ...this.state,
-      dotX: e.evt.clientX,
-      dotY: e.evt.clientY
+      dotX: pos.x,
+      dotY: pos.y
     })
   }
 
@@ -88,8 +90,8 @@ export default class Room extends Component {
         opacity={this.state.hoveredItem === itemId ? 0.2 : 0}
         fill='orange'
         closed
-        onClick={(e) => this._clickHandler(itemId, {x: e.evt.clientX, y: e.evt.clientY})}
-        onTap={(e) => this._clickHandler(itemId, e.target.getStage().getPointerPosition())}
+        onClick={(e) => this._clickHandler(itemId, e)}
+        onTap={(e) => this._clickHandler(itemId, e)}
         onMouseover={this._hoverHandler.bind(this, itemId)}
         onMouseleave={this._hoverEndHandler.bind(this, itemId)}
         onTouchEnd={this._mouseUpHandler.bind(this, itemId)}
